@@ -24,7 +24,7 @@ if(CMAKE_VERSION VERSION_LESS "2.8.11")
 endif()
 
 # Declare the executable target built from your sources
-add_executable(opencv_bug bug.cpp functions.hpp functions.cpp)
+add_executable(opencv_bug ./src/bug.cpp ./include/functions.hpp ./src/functions.cpp)
 
 # Link your application with OpenCV libraries
 target_link_libraries(opencv_bug ${OpenCV_LIBS})

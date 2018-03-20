@@ -1,5 +1,5 @@
 
-#include "functions.hpp"
+#include "../include/functions.hpp"
 
 using namespace cv;
 
@@ -19,8 +19,8 @@ int main( int, char** argv )
   imshow(window_name, result.second);
   waitKey(0);
 
-  imwrite( "color_sharp_image.jpg", result.first);
-  imwrite( "depth_image.jpg", result.second);
+  imwrite( "result_images/color_sharp_image.jpg", result.first);
+  imwrite( "result_images/depth_image.jpg", result.second);
 
   std::cout << "FINSIHED" << std::endl;
 

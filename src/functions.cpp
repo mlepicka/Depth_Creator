@@ -1,4 +1,4 @@
-#include "functions.hpp"
+#include "../include/functions.hpp"
 
 
 
@@ -30,6 +30,7 @@ std::pair<Mat, Mat> create_sharp_image_and_depth_map(std::vector<Mat> images){
   std::vector<Mat> edge_maps;
   std::vector<double> weights;
   std::pair<Mat,Mat> result;
+
   double weight_diff = 255.00/(double) images.size();
 
   for(int iter= 0; iter < images.size()  ; ++iter){
@@ -44,7 +45,7 @@ std::pair<Mat, Mat> create_sharp_image_and_depth_map(std::vector<Mat> images){
   for(int iter= 1; iter < images.size()  ; ++iter){
     result = smart_max_mat(iter == 1 ? std::pair<Mat, Mat>(images[iter-1], edge_maps[iter-1]) : result,
                            std::pair<Mat, Mat>(images[iter], edge_maps[iter]), 
-                           depth_map, weights[iter-1]);
+                           depth_map, weights[iter]);
   }
   medianBlur(depth_map, depth_map, 3);
 
@@ -60,12 +61,8 @@ std::pair<Mat, Mat> smart_max_mat(std::pair<Mat, Mat> firstImage, std::pair<Mat,
 
   for(int j=0; j< grey.rows; j++){
     for (int i=0; i< grey.cols; i++){  
-      if((uchar)firstImage.second.at<uchar>(j,i) > (uchar)secondImage.second.at<uchar>(j,i)){ 
-        //first mat grey value is bigger - more edgy -> sharp image
-        color.at<Vec3b>(j,i) = firstImage.first.at<Vec3b>(j,i);
-        grey.at<uchar>(j,i) = firstImage.second.at<uchar>(j,i);
-      } else {  
-        //second mat grey value is bigger
+      if((uchar)firstImage.second.at<uchar>(j,i) <= (uchar)secondImage.second.at<uchar>(j,i)){ 
+        //second mat grey value is bigger - more edgy -> sharper part of image
         color.at<Vec3b>(j,i) = secondImage.first.at<Vec3b>(j,i);
         grey.at<uchar>(j,i) = secondImage.second.at<uchar>(j,i);
         depth_map.at<uchar>(j,i) = (int)(255.00-color_modificator);
